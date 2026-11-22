@@ -17,7 +17,7 @@
  */
 #pragma once
 
-vl biconnected_components(ll n, vector<pll> &edges) {
+vl biconnectedComponents(ll n, vector<pll> &edges) {
     ll k = n, t = 0, c = 0, p = 0;
     vector<vector<pll>> adj(n);
     for (auto [u, v] : edges) {
