@@ -2,7 +2,6 @@ bash for brute force
 remove pii and vi
 hash thing
 halfplane intersection
-(2.3 trigonometry) parentheses
 segtree/treap stuff
 offline tree?
 investigate FT2
