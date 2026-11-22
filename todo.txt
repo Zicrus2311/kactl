@@ -1,0 +1,18 @@
+bash for brute force
+remove pii and vi
+hash thing
+halfplane intersection
+(2.3 trigonometry) parentheses
+segtree/treap stuff
+offline tree?
+investigate FT2
+try using mo queries
+maybe improve bint
+polyinterpolate ll mod
+gss function syntax
+investigate hillclimbing
+solvelinear for ll mod
+check comments in matrixinverse
+fft intermediate representation
+euclid sus
+dinic?
