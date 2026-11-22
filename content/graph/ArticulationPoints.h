@@ -9,16 +9,16 @@
 #pragma once
 
 vl articulationPoints(vvl &adj) {
-    ll t = 0; vl tin(sz(adj)), res;
+    ll n = sz(adj), t = 0; vl tin(n), res;
     auto dfs = [&](auto &self, ll i, ll p) -> ll {
-        ll &h = tin[i]; if (h) return h;
-        ll mn = h = ++t, mx = 0, cnt = 0;
+		ll &h = tin[i]; if (h) return h;
+        ll mn = h = ++t, mx = 0, cnt = p >= 0;
         for (ll e : adj[i]) if (e != p) {
             ll f = !tin[e], v = self(self, e, i);
-            mn = min(mn, v); if (f) mx = max(mx, v), cnt++;
+            mn = min(mn, v); cnt += (f && v >= h);
         }
-        if (p < 0 ? cnt > 1 : mx >= h) res.push_back(i);
+        if (cnt > 1) res.push_back(i);
         return mn;
-    }; dfs(dfs, 0, -1);
-    return res;
+    }; rep(i, 0, n) dfs(dfs, i, -1);
+	return res;
 }

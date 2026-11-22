@@ -1,53 +1,48 @@
 /**
- * Author: Simon Lindholm
- * Date: 2017-04-17
+ * Author: Sebastian Meineche Falk
+ * Date: 2026-11-22
  * License: CC0
- * Source: folklore
- * Description: Finds all biconnected components in an undirected graph, and
- *  runs a callback for the edges in each. In a biconnected component there
- *  are at least two distinct paths between any two nodes. Note that a node can
- *  be in several components. An edge which is not in a component is a bridge,
- *  i.e., not part of any cycle.
- * Usage:
- *  int eid = 0; ed.resize(N);
- *  for each edge (a,b) {
- *    ed[a].emplace_back(b, eid);
- *    ed[b].emplace_back(a, eid++); }
- *  bicomps([\&](const vi\& edgelist) {...});
- * Time: O(E + V)
- * Status: tested during MIPT ICPC Workshop 2017
+ * Source: intuition
+ * Description: Finds the biconnected components of an undirected graph.\\
+ *  bcc[0, n) represents vertices, bcc[n, n+m) represents edges.
+ *  bcc[i] == bcc[j] iff i is unambiguously in the same biconnected component as j.\\
+ *  A biconnected component has at least two vertex-disjoint paths between any two vertices. Articulation points are those shared between distinct biconnected components*. They have unique bcc[i].\\
+ *  *Note: Bridges and self-loops count as biconnected components. Note that this leads to an unusual definition of "articulation points" above.\\
+ *  Let count(c) be the number of *edges* in component c. Then:\\
+ *  - count(bcc[i]) == 0 iff vertex i articulation point (see note) OR has deg. 0.\\
+ *  - count(bcc[n+i]) == 1 iff edge i bridge OR self-loop.\\
+ *  Beware of degree 0, self-loops, vertex with only self-loops.
+ * Time: O(V + E)
+ * Status: tested on various problems
  */
 #pragma once
 
-vi num, st;
-vector<vector<pii>> ed;
-int Time;
-template<class F>
-int dfs(int at, int par, F& f) {
-	int me = num[at] = ++Time, top = me;
-	for (auto [y, e] : ed[at]) if (e != par) {
-		if (num[y]) {
-			top = min(top, num[y]);
-			if (num[y] < me)
-				st.push_back(e);
-		} else {
-			int si = sz(st);
-			int up = dfs(y, e, f);
-			top = min(top, up);
-			if (up == me) {
-				st.push_back(e);
-				f(vi(st.begin() + si, st.end()));
-				st.resize(si);
-			}
-			else if (up < me) st.push_back(e);
-			else { /* e is a bridge */ }
-		}
-	}
-	return top;
-}
-
-template<class F>
-void bicomps(F f) {
-	num.assign(sz(ed), 0);
-	rep(i,0,sz(ed)) if (!num[i]) dfs(i, -1, f);
+vl biconnected_components(ll n, vector<pll> &edges) {
+    ll k = n, t = 0, c = 0, p = 0;
+    vector<vector<pll>> adj(n);
+    for (auto [u, v] : edges) {
+        if (u != v) adj[u].emplace_back(v, k);
+        adj[v].emplace_back(u, k++);
+    }
+    vl tin(n), stk(k), bcc(k);
+    auto dfs = [&](auto &oink, ll i, ll pe) -> ll {
+        ll &h = tin[i]; if (h) return h;
+        ll cnt = pe > 0, mn = h = ++t;
+        for (auto &[e, id] : adj[i]) {
+            if (id == pe) continue;
+            ll r, lp = p, vis = tin[e] && e != i;
+            if (tin[e] <= h) stk[p++] = id;
+            mn = min(mn, r = oink(oink, e, id));
+            if (!vis && r >= h) {
+                while (p > lp) bcc[stk[--p]] = c;
+                c++, cnt++;
+            }
+        }
+        if (cnt != 1) bcc[i] = c++;
+        else if (pe) stk[p++] = i;
+        else bcc[i] = c-1;
+        return mn;
+    };
+    rep(i, 0, n) dfs(dfs, i, 0);
+    return bcc;
 }
