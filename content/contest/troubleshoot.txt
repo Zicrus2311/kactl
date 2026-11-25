@@ -13,7 +13,9 @@ Are you clearing all data structures between test cases?
 Can your algorithm handle the whole range of input (+corner cases)?
 Read the full problem statement again.
 Any overflows?
-Confusing N and M, i and j, etc.?
+Confusing N and M, i and j, wrong array etc.?
+Is some data only partially updated (e.g. modify vector but not N)?
+Is everything in the correct domain?
 Are you sure your algorithm works?
 Are you sure the builtin/STL functions you use work as you think?
 Add some assertions, maybe resubmit.
