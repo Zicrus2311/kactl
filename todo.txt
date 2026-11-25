@@ -1,4 +1,3 @@
-bash for brute force
 remove pii and vi
 hash thing
 halfplane intersection
@@ -14,4 +13,3 @@ solvelinear for ll mod
 check comments in matrixinverse
 fft intermediate representation
 euclid sus
-dinic?
